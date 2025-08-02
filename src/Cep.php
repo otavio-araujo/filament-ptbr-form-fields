@@ -3,8 +3,8 @@
 namespace Leandrocfe\FilamentPtbrFormFields;
 
 use Filament\Actions\Action;
-use Filament\Schemas\Components\Component;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Utilities\Set;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
@@ -31,11 +31,7 @@ class Cep extends TextInput
                 ]);
             }
 
-            $nextFocusTargetComponent = collect($component->getContainer()->getComponents())
-                ->filter(fn ($formComponent): bool => str_contains($formComponent->cachedAbsoluteKey, $nextFocusField))
-                ->first();
-
-            $livewire->js("document.getElementById('{$nextFocusTargetComponent->cachedAbsoluteKey}').focus()");
+            $livewire->js("document.getElementById('{$component->getContainer()->getComponent($nextFocusField)->cachedAbsoluteKey}').focus()");
         };
 
         $this
@@ -54,6 +50,7 @@ class Cep extends TextInput
                         })
                         ->cancelParentActions();
                 }
+                return null;
             })
             ->prefixAction(function () use ($mode, $errorMessage, $setFields, $viaCepRequest, $nextFocusField) {
                 if ($mode === 'prefix') {
@@ -65,6 +62,7 @@ class Cep extends TextInput
                         })
                         ->cancelParentActions();
                 }
+                return null;
             });
 
         return $this;
